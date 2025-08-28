@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Fake CMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File List</title>
   <link rel="stylesheet" href="assets/styles.css">
-  <script src="assets/config.js"></script>
-  <script src="assets/app.js" defer></script>
 </head>
 <body>
-  <div class="file-list-container">
-    <h2>Available Files</h2>
-    <select id="sortOptions">
-      <option value="name">Alphabetical</option>
-      <option value="size">File Size</option>
-      <option value="date">Date</option>
-      <option value="recent">Most Recent</option>
+  <header>
+    <h1>Files</h1>
+    <select id="sort-select">
+      <option value="recent">Recent</option>
+      <option value="alpha">Alphabetical</option>
+      <option value="size">By Size</option>
+      <option value="date">By Date</option>
     </select>
-    <div class="file-list" id="fileList"></div>
-  </div>
+  </header>
+  <div id="file-list" class="file-list"></div>
+  <script src="assets/config.js"></script>
+  <script src="assets/app.js"></script>
 </body>
 </html>

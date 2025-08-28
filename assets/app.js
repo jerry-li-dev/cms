@@ -1,38 +1,49 @@
-document.addEventListener("DOMContentLoaded", () => {
-  if(localStorage.getItem("loggedIn") !== "true") {
+async function fakeLogin(username, password) {
+  const validUser = window.CONFIG.users.find(
+    u => u.username === username && u.password === password
+  );
+  return !!validUser;
+}
+
+document.getElementById("login-form")?.addEventListener("submit", async e => {
+  e.preventDefault();
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if (await fakeLogin(username, password)) {
+    sessionStorage.setItem("loggedIn", "true");
+    window.location.href = "app.html";
+  } else {
+    alert("Invalid username or password");
+  }
+});
+
+async function fetchFileList() {
+  const owner = "octocat"; // Replace with your repo
+  const repo = "Hello-World";
+  const branch = "main";
+  const url = `https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`;
+  const res = await fetch(url);
+  return await res.json();
+}
+
+function renderFileList(files) {
+  const container = document.getElementById("file-list");
+  container.innerHTML = "";
+  files.forEach(file => {
+    const item = document.createElement("div");
+    item.className = "file-item";
+    item.innerHTML = `<a href="file.html?url=${encodeURIComponent(file.download_url)}">${file.name}</a>`;
+    container.appendChild(item);
+  });
+}
+
+async function initFileList() {
+  if (sessionStorage.getItem("loggedIn") !== "true") {
     window.location.href = "index.html";
     return;
   }
-  const fileListDiv = document.getElementById("fileList");
-  const sortSelect = document.getElementById("sortOptions");
-  const { owner, name, branch, folder } = CONFIG.repo;
-  const apiUrl = `https://api.github.com/repos/${owner}/${name}/contents/${folder}?ref=${branch}`;
-
-  let files = [];
-  fetch(apiUrl).then(r => r.json()).then(data => {
-    files = data.filter(f => f.type === "file");
-    render(files);
-  });
-
-  sortSelect.addEventListener("change", () => {
-    render(files, sortSelect.value);
-  });
-
-  function render(files, sortBy="name") {
-    let sorted = [...files];
-    if(sortBy === "name") sorted.sort((a,b)=>a.name.localeCompare(b.name));
-    else if(sortBy === "size") sorted.sort((a,b)=>(a.size||0)-(b.size||0));
-    else if(sortBy === "date") sorted.sort((a,b)=>new Date(a.git_url)-new Date(b.git_url));
-    else if(sortBy === "recent") sorted.reverse();
-    fileListDiv.innerHTML = "";
-    sorted.forEach(f => {
-      const item = document.createElement("div");
-      item.textContent = `${f.name} (${(f.size/1024).toFixed(1)} KB)`;
-      item.classList.add("file-item");
-      item.onclick = () => {
-        window.location.href = `file.html?name=${encodeURIComponent(f.name)}&url=${encodeURIComponent(f.download_url)}`;
-      };
-      fileListDiv.appendChild(item);
-    });
-  }
-});
+  let files = await fetchFileList();
+  renderFileList(files);
+}
+if (document.getElementById("file-list")) initFileList();
