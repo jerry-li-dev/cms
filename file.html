@@ -8,6 +8,31 @@
 <body>
 <div id="view">Loading file...</div>
 <script src="assets/config.js"></script>
-<script src="assets/file.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const fileName = params.get('file'); 
+if (!fileName) { document.getElementById('view').innerHTML = '<div class="error">No file specified.</div>'; }
+
+const cfg = window.APP_CONFIG;
+const path = cfg.fileMap[fileName]; 
+
+async function loadFile() {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(cfg.branch)}`);
+    const meta = await res.json();
+    const raw = meta.download_url;
+    const ext = fileName.split('.').pop().toLowerCase();
+    let preview = '';
+    if (['png','jpg','jpeg','gif','webp'].includes(ext)) preview = `<img src="${raw}" alt="${fileName}" style="max-width:100%; border-radius:8px">`;
+    else if (ext==='pdf') preview = `<iframe src="${raw}" style="width:100%; height:70vh; border:0;"></iframe>`;
+    else preview = `<a href="${raw}" class="btn">Download File</a>`;
+
+    document.getElementById('view').innerHTML = `<h2>${fileName}</h2><div class="preview">${preview}</div><a href="${raw}" class="btn">Download File</a>`;
+  } catch(e) {
+    document.getElementById('view').innerHTML = `<div class="error">Error loading file: ${e.message}</div>`;
+  }
+}
+loadFile();
+</script>
 </body>
 </html>
