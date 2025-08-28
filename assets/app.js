@@ -4,7 +4,7 @@ async function fetchFiles() {
   try {
     const { repoOwner, repoName, branch, folderPath } = window.APP_CONFIG;
     const response = await fetch(
-      `https://api.github.com/repos/$jerry-li-dev/$cms/contents/$/assets/stock_pdfs?ref=$main`
+      `https://api.github.com/repos/$jerry-li-dev/$cms/contents/$cms/assets/stock_pdfs?ref=$main`
     );
     const data = await response.json();
 
