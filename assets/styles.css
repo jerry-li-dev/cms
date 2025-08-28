@@ -1,58 +1,26 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px;
-    background-color: #fdfdfd; /* light background */
-    color: #333;
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 0;
 }
-
-#loginContainer, #dashboard {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    max-width: 600px;
-    margin: 0 auto 20px auto;
+.login-container, .file-list-container, .file-preview-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-
-.scrollable-list {
-    max-height: 60vh;
-    overflow-y: auto;
-    border: 1px solid #e0e0e0;
-    padding: 8px;
-    border-radius: 6px;
-    background-color: #fafafa;
+input, button {
+  margin: 10px 0;
+  padding: 10px;
+  width: 100%;
 }
-
-.list-item {
-    display: block;
-    padding: 6px 10px;
-    margin: 4px 0;
-    text-decoration: none;
-    color: #222;
-    border-radius: 4px;
+.file-list {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
 }
-
-.list-item:hover {
-    background-color: #e8f0fe;
-}
-
-.btn {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.muted {
-    color: #777;
-}
-
-.meta {
-    font-size: 0.8em;
-    color: #555;
-    margin-top: 2px;
-}
+.error { color: red; }

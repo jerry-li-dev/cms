@@ -1,39 +1,15 @@
-window.Auth = {
-  user: null,
-  currentUser: function() {
-    const saved = sessionStorage.getItem('fakeUser');
-    if(saved && !this.user) this.user = JSON.parse(saved);
-    return this.user;
-  },
-  login: function() {
-    const u=document.getElementById('username').value.trim();
-    const p=document.getElementById('password').value.trim();
-    const users=window.APP_CONFIG.users||[];
-    const match=users.find(user=>user.username===u && user.password===p);
-    if(match){
-      this.user={username:match.username,displayName:match.displayName};
-      sessionStorage.setItem('fakeUser',JSON.stringify(this.user));
-      document.getElementById('loginContainer').style.display='none';
-      document.getElementById('dashboard').style.display='block';
-      App.init();
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const user = CONFIG.users.find(u => u.username === username && u.password === password);
+    if(user) {
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "app.html";
     } else {
-      alert("Invalid username or password.");
+      document.getElementById("loginError").textContent = "Invalid credentials.";
     }
-  },
-  logout: function() {
-    this.user=null;
-    sessionStorage.removeItem('fakeUser');
-    document.getElementById('dashboard').style.display='none';
-    document.getElementById('loginContainer').style.display='block';
-  },
-  checkLogin: function() {
-    if(this.currentUser()) {
-      document.getElementById('loginContainer').style.display='none';
-      document.getElementById('dashboard').style.display='block';
-      App.init();
-    } else {
-      document.getElementById('loginContainer').style.display='block';
-      document.getElementById('dashboard').style.display='none';
-    }
-  }
-};
+  });
+});

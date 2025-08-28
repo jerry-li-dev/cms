@@ -1,51 +1,21 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Login - Fake CMS</title>
-  <link rel="stylesheet" href="assets/style.css">
+  <meta charset="UTF-8">
+  <title>Fake CMS Login</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script src="assets/config.js"></script>
+  <script src="assets/auth.js" defer></script>
 </head>
 <body>
-  <div class="container center-card">
-    <div class="card small">
-      <h1 id="brand">Fake CMS</h1>
-      <p class="muted">Demo login — do not use real passwords.</p>
-
-      <form id="loginForm" onsubmit="return false;">
-        <label>Username</label>
-        <input id="username" class="input" placeholder="admin">
-        <label>Password</label>
-        <input id="password" class="input" type="password" placeholder="admin123">
-        <div style="height:10px"></div>
-        <button class="btn primary" id="signin">Sign in</button>
-        <div id="msg" class="muted small" style="margin-top:12px"></div>
-      </form>
-
-      <div class="small muted" style="margin-top:12px">Demo accounts: <strong>admin/admin123</strong>, <strong>demo/demo</strong></div>
-    </div>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
+      <button type="submit">Login</button>
+    </form>
+    <div id="loginError" class="error"></div>
   </div>
-
-  <script src="assets/config.js"></script>
-  <script src="assets/auth.js"></script>
-  <script>
-    document.getElementById('brand').textContent = window.APP_CONFIG.siteTitle || 'Fake CMS';
-
-    document.getElementById('signin').addEventListener('click', () => {
-      const u = document.getElementById('username').value.trim();
-      const p = document.getElementById('password').value;
-      const s = Auth.login(u,p);
-      const m = document.getElementById('msg');
-      if (!s) {
-        m.textContent = 'Invalid credentials';
-        return;
-      }
-      m.textContent = 'Welcome, ' + s.displayName + ' — Redirecting…';
-      setTimeout(() => location.href = 'app.html', 400);
-    });
-
-    // If already logged in, redirect straight to app
-    if (Auth.currentUser()) location.href = 'app.html';
-  </script>
 </body>
 </html>
