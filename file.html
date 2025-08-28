@@ -10,11 +10,11 @@
 <script src="assets/config.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
-const fileName = params.get('file'); 
+const fileName = params.get('file');
 if (!fileName) { document.getElementById('view').innerHTML = '<div class="error">No file specified.</div>'; }
 
 const cfg = window.APP_CONFIG;
-const path = cfg.fileMap[fileName]; 
+const path = cfg.fileMap[fileName];
 
 async function loadFile() {
   try {

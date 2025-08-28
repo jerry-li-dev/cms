@@ -15,7 +15,7 @@
 </div>
 
 <div id="dashboard" style="display:none">
-  <div>User: <span id="userBadge"></span> 
+  <div>User: <span id="userBadge"></span>
       <button onclick="Auth.logout()">Logout</button>
   </div>
 
@@ -27,7 +27,14 @@
     <label for="sortSelect">Sort by:</label>
     <select id="sortSelect">
       <option value="alphabetical">Alphabetical (A→Z)</option>
+      <option value="size">File Size (Largest)</option>
+      <option value="recent">Recently Added</option>
     </select>
+  </div>
+
+  <div style="margin-bottom:12px;">
+    <label for="dateFilter">Show files from last N days:</label>
+    <input type="number" id="dateFilter" min="0" placeholder="0 = all" style="width:60px;">
   </div>
 
   <div id="fileList" class="scrollable-list"></div>
