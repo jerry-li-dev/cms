@@ -4,13 +4,13 @@ async function fetchFiles() {
   try {
     const { repoOwner, repoName, branch, folderPath } = window.APP_CONFIG;
     const response = await fetch(
-      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}?ref=${branch}`
+      `https://api.github.com/repos/$jerry-li-dev/$cms/contents/$/assets/stock_pdfs?ref=$main`
     );
     const data = await response.json();
 
     fileList = data
       .filter(item => item.type === "file")
-      .map(item => ({ 
+      .map(item => ({
         name: item.name,
         path: item.path,
         size: item.size,
