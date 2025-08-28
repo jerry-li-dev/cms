@@ -1,36 +1,13 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>File - Fake CMS</title>
-  <link rel="stylesheet" href="assets/style.css">
+<meta charset="UTF-8">
+<title>File View</title>
+<link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
-  <script src="assets/config.js"></script>
-  <script src="assets/auth.js"></script>
-  <script src="assets/api.js"></script>
-  <script>Auth.requireAuth();</script>
-
-  <div class="container">
-    <div class="card">
-      <div class="header">
-        <div class="brand" id="brandTitle"></div>
-        <div class="header-actions">
-          <a class="btn secondary" href="app.html">← Back</a>
-          <button class="btn danger" onclick="Auth.logout()">Logout</button>
-        </div>
-      </div>
-
-      <div class="fileview" id="view">
-        Loading...
-      </div>
-
-      <div class="footer muted small">File preview uses GitHub raw file URLs (public repo only).</div>
-    </div>
-  </div>
-
-  <script src="assets/file.js"></script>
-  <script>document.getElementById('brandTitle').textContent = window.APP_CONFIG.siteTitle || 'Fake CMS';</script>
+<div id="view">Loading file...</div>
+<script src="assets/config.js"></script>
+<script src="assets/file.js"></script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-// Renders file landing page and preview (basic inline for images, pdfs, text)
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(location.search);
   const path = params.get('path');
@@ -10,11 +9,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(path)}?ref=${encodeURIComponent(cfg.branch)}`);
     if (!res.ok) throw new Error('GitHub API error ' + res.status);
-    const meta = await res.json(); // contains download_url, size, name, path
-    // get latest commit too
+    const meta = await res.json();
+
     const commitRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/commits?path=${encodeURIComponent(path)}&per_page=1&sha=${encodeURIComponent(cfg.branch)}`);
-    let commitJson = null;
-    if (commitRes.ok) commitJson = (await commitRes.json())[0];
+    const commitJson = commitRes.ok ? (await commitRes.json())[0] : null;
 
     const name = meta.name;
     const raw = meta.download_url;
@@ -32,20 +30,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       preview = `<div class="muted">No inline preview available. Use Download link.</div>`;
     }
 
-    const commitMsg = commitJson ? commitJson.commit.message.split('\\n')[0] : 'N/A';
+    const commitMsg = commitJson ? commitJson.commit.message.split('\n')[0] : 'N/A';
     const commitDate = commitJson ? new Date(commitJson.commit.author.date).toLocaleString() : 'N/A';
 
     document.getElementById('view').innerHTML = `
-      <div style="padding:16px">
-        <h2>${name}</h2>
-        <div class="kv"><div class="k">Path</div><div class="v">${meta.path}</div></div>
-        <div class="kv"><div class="k">Size</div><div class="v">${(size/1024).toFixed(1)} KB</div></div>
-        <div class="kv"><div class="k">Latest Commit</div><div class="v">${commitJson ? commitJson.sha.substring(0,7) : 'N/A'} — ${commitMsg}</div></div>
-        <div style="margin:10px 0;"><a class="btn" href="${raw}" download>Download</a> <a class="btn secondary" href="${raw}" target="_blank">Open Raw</a> <a class="btn secondary" href="https://github.com/${cfg.owner}/${cfg.repo}/blob/${cfg.branch}/${encodeURIComponent(meta.path)}" target="_blank">View on GitHub</a></div>
-        <div class="preview">${preview}</div>
-      </div>
+      <h2>${name}</h2>
+      <div class="kv"><span class="k">Size:</span><span class="v">${(size/1024).toFixed(1)} KB</span></div>
+      <div class="kv"><span class="k">Latest commit:</span><span class="v">${commitMsg} (${commitDate})</span></div>
+      <div class="preview">${preview}</div>
+      <a href="${raw}" class="btn">Download File</a>
     `;
-  } catch (e) {
-    document.getElementById('view').innerHTML = `<div class="error">Error: ${e.message}</div>`;
+  } catch(e){
+    document.getElementById('view').innerHTML = `<div class="error">Error loading file: ${e.message}</div>`;
   }
 });

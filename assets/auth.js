@@ -1,32 +1,44 @@
-// Fake client-side auth (localStorage). NOT SECURE — demo only.
-(function(){
-  const KEY = "fakecms_session_v1";
+window.Auth = {
+  user: null,
 
-  function login(username, password) {
-    const cfg = window.APP_CONFIG || {};
-    const match = (cfg.users || []).find(u => u.username === username && u.password === password);
-    if (!match) return null;
-    const token = btoa(`${username}:${Date.now()}`);
-    const session = { username: match.username, displayName: match.displayName, token, ts: Date.now() };
-    localStorage.setItem(KEY, JSON.stringify(session));
-    return session;
-  }
+  currentUser: function() {
+    const saved = sessionStorage.getItem('fakeUser');
+    if(saved && !this.user) this.user = JSON.parse(saved);
+    return this.user;
+  },
 
-  function logout() {
-    localStorage.removeItem(KEY);
-    location.href = "index.html";
-  }
+  login: function() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    const users = window.APP_CONFIG.users || [];
+    const match = users.find(user => user.username === u && user.password === p);
 
-  function currentUser() {
-    try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; }
-  }
+    if(match){
+      this.user = { username: match.username, displayName: match.displayName };
+      sessionStorage.setItem('fakeUser', JSON.stringify(this.user));
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      App.init();
+    } else {
+      alert("Invalid username or password.");
+    }
+  },
 
-  function requireAuth() {
-    if (!currentUser()) {
-      const redirect = encodeURIComponent(location.pathname + location.search + location.hash);
-      location.replace('index.html?redirect=' + redirect);
+  logout: function() {
+    this.user = null;
+    sessionStorage.removeItem('fakeUser');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('loginContainer').style.display = 'block';
+  },
+
+  checkLogin: function() {
+    if(this.currentUser()) {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      App.init();
+    } else {
+      document.getElementById('loginContainer').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
     }
   }
-
-  window.Auth = { login, logout, currentUser, requireAuth };
-})();
+};
