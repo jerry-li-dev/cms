@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Files - Fake CMS</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <script src="assets/config.js"></script>
+  <script src="assets/auth.js"></script>
+  <script src="assets/api.js"></script>
+  <script>Auth.requireAuth();</script>
+
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div class="brand" id="brandTitle"></div>
+        <div class="header-actions">
+          <input class="input inline search" id="search" placeholder="Search files...">
+          <button class="btn secondary" id="refresh">Refresh</button>
+          <button class="btn danger" id="logout">Logout</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <aside class="sidebar">
+          <div class="kv"><div class="k">Signed in as</div><div class="v" id="userBadge"></div></div>
+          <hr>
+          <div id="folderList"></div>
+        </aside>
+
+        <main class="main-panel">
+          <h2 style="margin-top:0">Files</h2>
+          <div id="fileList" class="scroll"></div>
+        </main>
+      </div>
+
+      <div class="footer muted small">Uses GitHub public API (public repo only). Unauthenticated requests ≈ 60/hr per IP.</div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+  <script>
+    document.getElementById('brandTitle').textContent = window.APP_CONFIG.siteTitle || 'Fake CMS';
+    document.getElementById('logout').addEventListener('click', () => Auth.logout());
+    document.getElementById('refresh').addEventListener('click', () => App.loadFiles());
+    document.getElementById('search').addEventListener('input', () => App.applyFilter());
+    // initialize
+    App.init();
+  </script>
+</body>
+</html>
