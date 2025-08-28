@@ -5,6 +5,6 @@ window.APP_CONFIG = {
   ],
   repoOwner: "jerry-li-dev",
    repoName: "cms",
-   branch: "main",   
-  folderPath: "assets/stock_pdfs"
+   branch: "main",
+  folderPath: ""
 };
