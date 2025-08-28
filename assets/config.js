@@ -3,8 +3,8 @@ window.APP_CONFIG = {
     { username: "admin", password: "password123" },
     { username: "user1", password: "test123" }
   ],
-  owner: "jerry-li-dev",
-   repo: "cms",
-   branch: "main",    // usually "main" or "master"
+  repoOwner: "jerry-li-dev",
+   repoName: "cms",
+   branch: "main",   
   folderPath: "assets/stock_pdfs"
 };
