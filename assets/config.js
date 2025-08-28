@@ -1,9 +1,10 @@
-window.CONFIG = {
+window.APP_CONFIG = {
+  users: [
+    { username: "admin", password: "password123" },
+    { username: "user1", password: "test123" }
+  ],
   owner: "jerry-li-dev",
-  repo: "cms",
-  branch: "main",    // usually "main" or "master"
-  folders: [""],
-  extensions: ["pdf","txt","md","png","jpg"],
-  
-  users: [{ username: "admin", password: "password" }]
+   repo: "cms",
+   branch: "main",    // usually "main" or "master"
+  folderPath: "assets/stock_pdfs"
 };

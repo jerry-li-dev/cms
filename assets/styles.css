@@ -1,5 +1,12 @@
-body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
-.login-container { max-width: 300px; margin: 100px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-.file-list { padding: 20px; max-height: 80vh; overflow-y: auto; }
-.file-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #eee; }
-.file-preview-container { padding: 20px; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0; padding: 0;
+}
+header { display:flex; justify-content:space-between; align-items:center;
+  padding:10px 20px; background:#eee; }
+.login-container { max-width:300px; margin:100px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+.file-list { max-height:300px; overflow-y:auto; border:1px solid #ccc; padding:10px; background:#fff; }
+.file-item { padding:5px; border-bottom:1px solid #eee; cursor:pointer; }
+.file-item:hover { background:#f0f0f0; }
+.file-preview { margin-top:20px; background:#fff; padding:10px; border:1px solid #ccc; }

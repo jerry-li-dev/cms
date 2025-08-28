@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File List</title>
-  <link rel="stylesheet" href="assets/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Dashboard</title>
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
   <header>
-    <h1>Files</h1>
-    <select id="sort-select">
-      <option value="recent">Recent</option>
-      <option value="alpha">Alphabetical</option>
-      <option value="size">By Size</option>
-      <option value="date">By Date</option>
-    </select>
+    <h1>File Dashboard</h1>
+    <button id="logoutBtn">Logout</button>
   </header>
-  <div id="file-list" class="file-list"></div>
+  <main>
+    <div class="controls">
+      <label for="sortSelect">Sort by:</label>
+      <select id="sortSelect">
+        <option value="alpha">Alphabetical</option>
+        <option value="date">Date</option>
+        <option value="size">File Size</option>
+      </select>
+    </div>
+    <div id="fileList" class="file-list"></div>
+    <div id="filePreview" class="file-preview"></div>
+  </main>
   <script src="assets/config.js"></script>
   <script src="assets/app.js"></script>
 </body>

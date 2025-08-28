@@ -1,49 +1,61 @@
-async function fakeLogin(username, password) {
-  const validUser = window.CONFIG.users.find(
-    u => u.username === username && u.password === password
-  );
-  return !!validUser;
-}
+let fileList = [];
 
-document.getElementById("login-form")?.addEventListener("submit", async e => {
-  e.preventDefault();
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+async function fetchFiles() {
+  try {
+    const { repoOwner, repoName, branch, folderPath } = window.APP_CONFIG;
+    const response = await fetch(
+      `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}?ref=${branch}`
+    );
+    const data = await response.json();
 
-  if (await fakeLogin(username, password)) {
-    sessionStorage.setItem("loggedIn", "true");
-    window.location.href = "app.html";
-  } else {
-    alert("Invalid username or password");
+    fileList = data
+      .filter(item => item.type === "file")
+      .map(item => ({ 
+        name: item.name,
+        path: item.path,
+        size: item.size,
+        date: item.sha ? item.sha.substring(0,7) : new Date().toISOString(),
+        url: item.download_url || item.url
+      }));
+    renderFiles();
+  } catch (err) {
+    console.error("Error fetching files:", err);
   }
-});
-
-async function fetchFileList() {
-  const owner = "octocat"; // Replace with your repo
-  const repo = "Hello-World";
-  const branch = "main";
-  const url = `https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`;
-  const res = await fetch(url);
-  return await res.json();
 }
 
-function renderFileList(files) {
-  const container = document.getElementById("file-list");
-  container.innerHTML = "";
-  files.forEach(file => {
+function renderFiles() {
+  const listEl = document.getElementById("fileList");
+  listEl.innerHTML = "";
+  fileList.forEach(file => {
     const item = document.createElement("div");
     item.className = "file-item";
-    item.innerHTML = `<a href="file.html?url=${encodeURIComponent(file.download_url)}">${file.name}</a>`;
-    container.appendChild(item);
+    item.textContent = `${file.name} ( ${(file.size/1024).toFixed(1)} KB )`;
+    item.addEventListener("click", () => showPreview(file));
+    listEl.appendChild(item);
   });
 }
 
-async function initFileList() {
-  if (sessionStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "index.html";
-    return;
-  }
-  let files = await fetchFileList();
-  renderFileList(files);
+function showPreview(file) {
+  const previewEl = document.getElementById("filePreview");
+  previewEl.innerHTML = `
+    <h3>${file.name}</h3>
+    <p>Size: ${(file.size/1024).toFixed(1)} KB</p>
+    <a href="${file.url}" download>Download</a>
+    <iframe src="${file.url}" width="100%" height="400px"></iframe>
+  `;
 }
-if (document.getElementById("file-list")) initFileList();
+
+document.getElementById("sortSelect").addEventListener("change", (e) => {
+  const val = e.target.value;
+  if (val === "alpha") fileList.sort((a,b)=>a.name.localeCompare(b.name));
+  if (val === "size") fileList.sort((a,b)=>a.size-b.size);
+  if (val === "date") fileList.sort((a,b)=> new Date(b.date) - new Date(a.date));
+  renderFiles();
+});
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "index.html";
+});
+
+window.onload = fetchFiles;
